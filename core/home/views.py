@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response 
 from .models import Person
 from .serializers import PersonSerializer
+from django.contrib.auth.models import User
 # Create your views here.
 
 
@@ -37,3 +38,6 @@ class HomePage(APIView):
         name = request.query_params["name"]  # query params
         # name = request.data["name"]  with body
         return Response({"body":"hello from api", "name": name})
+
+
+
