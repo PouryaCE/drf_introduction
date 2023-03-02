@@ -22,5 +22,10 @@ from rest_framework.response import Response
 # my second api
 class HomePage(APIView):
     def get(self, request):
-        return Response({"name": "pourya","body":"hello from api"})
-        
+        age = request.query_params["age"]
+        return Response({"name": "pourya","body":"hello from api", "age": age})
+
+    def post(self, request):
+        name = request.query_params["name"]  # query params
+        # name = request.data["name"]  with body
+        return Response({"body":"hello from api", "name": name})
