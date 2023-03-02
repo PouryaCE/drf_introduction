@@ -3,6 +3,8 @@
 # from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response 
+from .models import Person
+from .serializers import PersonSerializer
 # Create your views here.
 
 
@@ -22,8 +24,14 @@ from rest_framework.response import Response
 # my second api
 class HomePage(APIView):
     def get(self, request):
-        age = request.query_params["age"]
-        return Response({"name": "pourya","body":"hello from api", "age": age})
+        persons = Person.objects.all()
+        ser_data = PersonSerializer(instance=persons, many=True)
+        return Response(data=ser_data.data)
+    """
+        we must sending the serialized data, rather than the  serializer itself,
+        to the response. You should change it to:
+        self.data = objects.data
+    """
 
     def post(self, request):
         name = request.query_params["name"]  # query params
