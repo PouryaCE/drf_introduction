@@ -22,7 +22,13 @@ class UserRegistrationSerializer(serializers.Serializer):
             return value
 
 
-
+    def validate(self, data):
+        pass1 = data["password1"]
+        pass2 = data["password2"]
+        if pass1 and pass2 and pass1 != pass2:
+            raise serializers.ValidationError("passwords must be match")
+        else:
+            return data
 
     
 
