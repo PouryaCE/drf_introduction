@@ -12,7 +12,7 @@ class UserRegistraion(APIView):
             User.objects.create_user(
                 username=ser_data._validated_data["username"],
                 email=ser_data._validated_data["email"],
-                password=ser_data.validated_data["password1"]
+                password=ser_data.validated_data["password"]
             )
             return Response(ser_data.data)
         else:
