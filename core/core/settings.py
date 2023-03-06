@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "home.apps.HomeConfig",
     "rest_framework",
-    "accounts.apps.AccountsConfig"
+    "accounts.apps.AccountsConfig",
+    "rest_framework.authtoken"
 ]
 
 MIDDLEWARE = [
@@ -118,3 +119,13 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+
+#_______________________________________________________________________________________
+""" Rest api settings """
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
