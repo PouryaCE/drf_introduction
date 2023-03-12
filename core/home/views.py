@@ -3,12 +3,12 @@
 # from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response 
-from .serializers import PersonSerializer, AnswerSerializer, QuestionSerializer
-from .models import Person, Answer, Question
+from .serializers import PersonSerializer, QuestionSerializer, UserSerializer
+from .models import Person, Question
 from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.renderers import JSONRenderer
 from rest_framework import status
+from permissions import IsSuperUser, IsSuperUserORStaffReadOnly, IsSuperUserOrOwner
 # Create your views here.
 
 
@@ -80,3 +80,57 @@ class QuestionView(APIView):
     def delete(self, request, pk):
         question = Question.objects.get(pk=pk).delete()
         return Response({"message":"deleted successfully"})
+
+
+
+
+class UserShowView(APIView):
+    permission_classes = [IsAuthenticated, IsSuperUserORStaffReadOnly]
+
+    def get(self, request):
+        users = User.objects.all()
+        self.check_object_permissions(self.request, users)
+        ser_data = UserSerializer(instance=users, many=True).data
+        return Response(ser_data, status=status.HTTP_200_OK)
+
+
+
+
+class UserUpdateView(APIView):
+    permission_classes = [IsSuperUserOrOwner,IsAuthenticated]
+
+    def put(self, request, pk):
+        user = User.objects.get(pk=pk)
+        self.check_object_permissions(request, user)
+        ser_data = UserSerializer(instance=user, data=request.data, partial=True)
+        if ser_data.is_valid():
+            ser_data.save()
+            return Response({"message":"you updated this user successfully"}, status=status.HTTP_200_OK)
+        else:
+            return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserCreationView(APIView):
+    permission_classes = [IsSuperUser,IsAuthenticated]
+
+
+    def post(self, request):
+        self.check_object_permissions(request, None)
+        ser_data = UserSerializer(data=request.POST)
+        if ser_data.is_valid():
+            ser_data.save()
+            return Response({"message":"you created a user successfully"}, status=status.HTTP_200_OK)
+        else:
+            return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class UserDeleteView(APIView):
+    permission_classes = [IsSuperUserOrOwner,IsAuthenticated]
+
+
+    def delete(self, request, pk):
+        user = User.objects.get(pk=pk)
+        self.check_object_permissions(request, user)
+        user.delete()
+        return Response({"message":"you deleted user successfully"}, status=status.HTTP_200_OK)
