@@ -3,9 +3,10 @@
 # from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response 
-from .models import Person
 from .serializers import PersonSerializer
+from .models import Person
 from django.contrib.auth.models import User
+from rest_framework.permissions import IsAuthenticated
 # Create your views here.
 
 
@@ -24,6 +25,9 @@ from django.contrib.auth.models import User
 
 # my second api
 class HomePage(APIView):
+
+    permission_classes = [IsAuthenticated,]
+
     def get(self, request):
         persons = Person.objects.all()
         ser_data = PersonSerializer(instance=persons, many=True)
