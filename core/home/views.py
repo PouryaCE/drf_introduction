@@ -3,8 +3,8 @@
 # from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response 
-from .serializers import PersonSerializer
-from .models import Person
+from .serializers import PersonSerializer, AnswerSerializer, QuestionSerializer
+from .models import Person, Answer, Question
 from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticated
 # Create your views here.
@@ -45,3 +45,22 @@ class HomePage(APIView):
 
 
 
+
+
+class QuestionView(APIView):
+    def get(self, request):
+        questions = Question.objects.all()
+        ser_data = QuestionSerializer(instance=questions, many=True).data
+        return Response(data=ser_data)
+
+
+    def post(self, request):
+        pass
+
+
+    def put(self, request, pk):
+        pass
+
+
+    def delete(self, request, pk):
+        pass
