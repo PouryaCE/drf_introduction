@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     "home.apps.HomeConfig",
     "rest_framework",
     "accounts.apps.AccountsConfig",
-    "rest_framework.authtoken"
+    "rest_framework.authtoken",
+    "blog.apps.BlogConfig",
 ]
 
 MIDDLEWARE = [
